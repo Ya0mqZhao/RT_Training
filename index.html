@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>React Time Training/Challange</title>
+  <title>Reaction Time Training</title>
   <style>
     * {
       margin: 0;
@@ -12,6 +12,7 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
+
     body {
       background: white;
       min-height: 100vh;
@@ -22,6 +23,7 @@
       padding: 20px;
       margin: 0;
     }
+
     .game-card {
       background: rgba(245, 240, 255, 0.7);
       backdrop-filter: blur(2px);
@@ -32,6 +34,7 @@
       padding: 1.2rem;
       border: 1px solid #e2ddf5;
     }
+
     .stats-header {
       background: #f1e9ff;
       border-radius: 1.8rem;
@@ -68,17 +71,20 @@
       font-weight: 700;
       color: #5e4b7c;
     }
+
     .progress-bars {
       margin-bottom: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
     }
+
     .progress-item {
       background: #f5efff;
       border-radius: 1rem;
       padding: 0.2rem 0.8rem;
     }
+
     .progress-label {
       font-size: 0.7rem;
       font-weight: 600;
@@ -87,20 +93,24 @@
       justify-content: space-between;
       margin-bottom: 0.2rem;
     }
+
     .progress-bar-bg {
       background: #ddd4ec;
       border-radius: 40px;
       height: 10px;
       overflow: hidden;
     }
+
     .progress-fill {
       width: 0%;
       height: 100%;
       transition: width 0.07s linear;
       border-radius: 40px;
     }
+
     .dots-fill { background: #a98cd9; }
     .time-fill { background: #f0b27a; }
+
     .stage-control {
       display: flex;
       flex-wrap: wrap;
@@ -108,6 +118,7 @@
       align-items: center;
       margin-bottom: 1rem;
     }
+
     .select-stage-btn {
       background: #cbbff0;
       border: none;
@@ -119,6 +130,7 @@
       font-size: 0.9rem;
       transition: 0.1s;
     }
+
     .start-stage-btn {
       background: #b5d3b1;
       border: none;
@@ -128,11 +140,13 @@
       color: #3b5a3a;
       cursor: pointer;
       font-size: 0.9rem;
+      transition: 0.1s;
     }
-    .start-stage-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+
+    .start-stage-btn.hidden {
+      display: none;
     }
+
     .level-menu {
       background: #f7f2ffdd;
       backdrop-filter: blur(8px);
@@ -172,6 +186,7 @@
       font-size: 0.7rem;
       color: #8d7aad;
     }
+
     .game-arena {
       position: relative;
       background: #ffffff;
@@ -184,6 +199,7 @@
       cursor: crosshair;
       overflow: hidden;
     }
+
     .target-dot {
       position: absolute;
       border-radius: 50%;
@@ -213,6 +229,7 @@
       color: #5a4875;
       cursor: pointer;
     }
+
     .popup-overlay {
       position: fixed;
       top: 0;
@@ -229,10 +246,12 @@
       opacity: 0;
       transition: 0.12s ease;
     }
+
     .popup-overlay.active {
       visibility: visible;
       opacity: 1;
     }
+
     .popup-card {
       background: #ffffffea;
       border-radius: 2rem;
@@ -241,21 +260,25 @@
       max-width: 320px;
       box-shadow: 0 12px 28px rgba(0,0,0,0.1);
     }
+
     .popup-card h3 {
       color: #b1624b;
       margin-bottom: 0.8rem;
       font-weight: 600;
     }
+
     .popup-card p {
       color: #5b4c6e;
       margin-bottom: 1rem;
     }
+
     .popup-buttons {
       display: flex;
       gap: 0.8rem;
       justify-content: center;
       margin-top: 0.5rem;
     }
+
     .popup-btn {
       padding: 0.5rem 1rem;
       border-radius: 3rem;
@@ -263,24 +286,29 @@
       font-weight: 600;
       cursor: pointer;
     }
+
     .restart-popup-btn {
       background: #b7c9e2;
       color: #2f4858;
     }
+
     .change-stage-popup-btn {
       background: #eedb9b;
       color: #6b4c2c;
     }
+
     .next-stage-btn {
       background: #a5d6a5;
       color: #2c5e2c;
     }
+
     .info-text {
       text-align: center;
       margin-top: 0.6rem;
       font-size: 0.7rem;
       color: #9080b0;
     }
+
     @media (max-width: 680px) {
       .timer-box { font-size: 1rem; padding: 0.2rem 0.8rem; }
       .dot-counter { font-size: 1.2rem; }
@@ -298,6 +326,7 @@
       <div class="dot-counter" id="dotsCounter">0 / <span id="targetDotsSpan">0</span></div>
     </div>
   </div>
+
   <div class="progress-bars">
     <div class="progress-item">
       <div class="progress-label"><span>stage progress</span><span id="dotsPercentLabel">0%</span></div>
@@ -308,21 +337,25 @@
       <div class="progress-bar-bg"><div class="progress-fill time-fill" id="timeProgressFill"></div></div>
     </div>
   </div>
+
   <div class="stage-control">
     <button id="selectStageBtn" class="select-stage-btn">select stage</button>
-    <button id="startStageBtn" class="start-stage-btn" disabled>start game</button>
+    <button id="startStageBtn" class="start-stage-btn hidden">start game</button>
   </div>
+
   <div id="levelMenu" class="level-menu"></div>
   <div id="gameArena" class="game-arena"></div>
+
   <div class="action-row">
     <button id="pauseGameBtn" class="game-btn">pause</button>
     <button id="restartStageBtn" class="game-btn">restart stage</button>
   </div>
   <div id="infoMsg" class="info-text">pick a stage → start game. catch dots before time runs out. timer resets after each catch.</div>
 </div>
+
 <div id="lossPopup" class="popup-overlay">
   <div class="popup-card">
-    <h3>time’s up</h3>
+    <h3>time's up</h3>
     <p>progress reset for this stage.</p>
     <div class="popup-buttons">
       <button id="popupRestartBtn" class="popup-btn restart-popup-btn">try again</button>
@@ -330,6 +363,7 @@
     </div>
   </div>
 </div>
+
 <div id="congratsPopup" class="popup-overlay">
   <div class="popup-card" id="congratsCard">
     <h3 id="congratsTitle">stage complete!</h3>
@@ -343,10 +377,10 @@
 
 <script>
   const STAGES = [
-    { name: "beginner",   timeLimitSec: 7.0, requiredDots: 5, minSize: 26, maxSize: 48 },
-    { name: "advance",    timeLimitSec: 5.0, requiredDots: 9, minSize: 18, maxSize: 38 },
-    { name: "sweat",      timeLimitSec: 3.2, requiredDots: 14, minSize: 12, maxSize: 28 },
-    { name: "unlimited",  timeLimitSec: 2.2, requiredDots: 999, minSize: 7, maxSize: 22 }
+    { name: "beginner",   timeLimitSec: 5.0, requiredDots: 5, minSize: 26, maxSize: 48 },
+    { name: "advance",    timeLimitSec: 3.0, requiredDots: 9, minSize: 18, maxSize: 38 },
+    { name: "sweat",      timeLimitSec: 2.2, requiredDots: 14, minSize: 12, maxSize: 28 },
+    { name: "unlimited",  timeLimitSec: 1.5, requiredDots: 999, minSize: 7, maxSize: 22 }
   ];
 
   const gameArena = document.getElementById('gameArena');
@@ -382,6 +416,7 @@
   let elapsedBeforePause = 0;
   let timerInterval = null;
   let currentDot = null;
+
   function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
   function getRandomPastelColor() {
@@ -474,6 +509,7 @@
     liveTimerSpan.innerText = formatTime(0);
     updateTimeProgress(currentTimeLimitMs);
   }
+
   function showCongrats() {
     stopTimer();
     isGameActive = false;
@@ -493,6 +529,7 @@
     pauseBtn.innerText = 'pause';
     infoMsg.innerText = stage.name + " completed! select next stage or keep playing.";
   }
+
   function dotClickHandler(e) {
     e.stopPropagation();
     if (!isGameActive || isPaused) return;
@@ -540,7 +577,6 @@
     }
     lossPopup.classList.remove('active');
     congratsPopup.classList.remove('active');
-    
     stopTimer();
     isGameActive = false;
     removeDot();
@@ -585,7 +621,6 @@
     pauseBtn.innerText = 'pause';
     infoMsg.innerText = `restarted · ${STAGES[currentStageIdx].name}`;
   }
-
   function togglePause() {
     if (!isGameActive) {
       infoMsg.innerText = `no active game. press start game.`;
@@ -622,7 +657,6 @@
     setStage(nextIdx);
     startNewRound();
   }
-
   function setStage(index) {
     if (isGameActive) {
       stopTimer();
@@ -643,10 +677,9 @@
     congratsPopup.classList.remove('active');
     removeDot();
     infoMsg.innerText = `${STAGES[currentStageIdx].name} selected. press start game.`;
-    startStageBtn.disabled = false;
+    startStageBtn.classList.remove('hidden');
     renderLevelMenu();
   }
-
   function renderLevelMenu() {
     levelMenuDiv.innerHTML = '';
     STAGES.forEach((stage, idx) => {
@@ -684,8 +717,6 @@
       currentDot.style.top = `${y}px`;
     }
   }
-
-  // ---- event binding ----
   window.addEventListener('resize', handleResize);
   selectStageBtn.addEventListener('click', toggleLevelMenu);
   startStageBtn.addEventListener('click', startNewRound);
@@ -709,18 +740,14 @@
     toggleLevelMenu();
     infoMsg.innerText = `choose a new stage.`;
   });
-  
-  // congrats popup buttons
   nextStageBtn.addEventListener('click', goToNextStage);
   congratsChangeStageBtn.addEventListener('click', () => {
     congratsPopup.classList.remove('active');
     toggleLevelMenu();
     infoMsg.innerText = `select a new stage to continue.`;
   });
-
-  // initial state
   currentStageIdx = null;
-  startStageBtn.disabled = true;
+  startStageBtn.classList.add('hidden');
   targetDotsSpan.innerText = '0';
   dotsCounterSpan.innerText = `0 / 0`;
   updateTimeProgress(1000);
